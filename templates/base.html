@@ -1,0 +1,61 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+        <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+{% block extrahead %}
+    {% endblock extrahead %}
+    </head>
+
+    
+    <body>
+
+        {% block navbar %}
+            {% include "includes/header.html" with user=user %}
+        {% endblock navbar %}
+
+        {% block content %}
+        {% endblock content %}
+
+        {% block footer %}
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <footer class="mt-1">
+
+        <div class="container-fluid bg-primary py-1">
+            
+            <div class="row py-3">
+                <div class="col-md-5 offset-md-4">
+                <p class="text-white">Developed By: Vasu Pal</p>
+                <p class="text-white">Technology: Django (Python)</p>
+                </div>
+                <div class="col-md-3">
+                <div class="d-inline-block">
+                    <div class="bg-circle-outline d-inline-block">
+                    <a href="https://www.facebook.com/ibuddy.vasu" class="text-white"><i class="fa fa-2x fa-fw fa-facebook"></i>
+                </a>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+        </div>
+        </footer>
+        {% endblock footer %}
+
+        {% block script %}
+        {% endblock script %}
+
+    </body>
+</html>

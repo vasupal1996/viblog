@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block extrahead %}
+  <style media="screen">
+    .account-settings{
+      margin-top: 20px;
+    }
+  </style>
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+  <script src="{% static 'js/jquery-file-upload/vendor/jquery.ui.widget.js' %}"></script>
+  <script src="{% static 'js/jquery-file-upload/jquery.iframe-transport.js' %}"></script>
+  <script src="{% static 'js/jquery-file-upload/jquery.fileupload.js' %}"></script>
+{% comment %}<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>{% endcomment %}
+  {# PHOTOS PAGE SCRIPTS #}
+  <script src="{% static 'js/basic-upload.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+
+  <div class="container account-settings">
+    <h4>Account Settings</h4>
+    <hr>
+    <div class="row">
+      <div class="col-md-3 profile">
+        {% include "core/profile_image.html" with user=user %}
+      <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  Change
+</button>
+</div>
+        
+      <div class="col-md-9">
+       <ul class="nav nav-tabs justify-content-end" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#form1">Personal</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+
+          <div role="tabpanel" class="col-md-10 offset-md-1 tab-pane active" id="form1"><br>
+            {% comment %} <form action="" method="POST">{% csrf_token %}
+              <div class="form-group row">
+                <label for="{{ form.first_name.id_for_label }}" class="col-3 col-form-label">{{ form.first_name.label }}</label>
+                <div class="col-9">
+                  <input class="form-control" type="text" value="{{ form.first_name.value }}" id="example-text-input">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="{{ form.last_name.id_for_label }}" class="col-3 col-form-label">{{ form.last_name.label }}</label>
+                <div class="col-9">
+                  <input class="form-control" type="text" value="{{ form.last_name.value }}" id="example-text-input">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="{{ form.dob.id_for_label }}" class="col-3 col-form-label">{{ form.dob.label }}</label>
+                <div class="col-9">
+                  <input class="form-control" type="date" value="{{ form.dob.value }}" id="{{ form.dob.id_for_label }}">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="{{ form.country.id_for_label }}" class="col-3 col-form-label">{{ form.country.label }}</label>
+                <div class="col-9">
+                  <input class="form-control" type="text" value="{% if form.country.value %}{{ form.country.value }}{% endif %}" id="{{ form.country.id_for_label }}">
+                </div>
+              </div>            
+              <div class="form-group row">
+                <label for="{{ form.state.id_for_label }}" class="col-3 col-form-label">{{ form.state.label }}</label>
+                <div class="col-9">
+                  <input class="form-control" type="text" value="{% if form.state.value %}{{ form.state.value }}}{% endif %}" id="{{ form.state.id_for_label }}">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="{{ profile.mobile.id_for_label }}" class="col-3 col-form-label">{{form.mobile.label}}</label>
+                <div class="col-9">
+                  <input class="form-control" type="tel" value="{% if form.mobile.value %}{{ form.mobile.value }}{% endif %}" id="{{ profile.mobile.id_for_label }}">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="{{ form.alternate_email.id_for_label }}" class="col-3 col-form-label">{{ form.alternate_email.label }}</label>
+                <div class="col-9">
+                  <input class="form-control" type="email" value="{% if form.alternate_email.value %}{{ form.alternate_email.value }}{% endif %}" id="{{ form.alternate_email.id_for_label }}">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="{{ form.intro_slogan.id_for_label }}" class="col-3 col-form-label">{{ form.intro_slogan.label }}</label>
+                <div class="col-9">
+                  <input class="form-control" type="text" value="{% if form.intro_slogan.value %}{{ form.intro_slogan.value }}}{% endif %}" id="{{ form.state.id_for_label }}">
+                </div>
+              </div>
+              <input  class="btn btn-outline-primary" type="submit" name="submit" value="Save">
+            </form> {% endcomment %}
+
+            <form action="" method="POST">{% csrf_token %}
+              {{ form|crispy}}
+              {{ userform|crispy }}
+              <input class="btn btn-outline-primary" type="submit" name="submit" value="Save">
+            </form>
+      
+          </div>
+          <div role="tabpanel" class="tab-pane" id="form2">bbb</div>
+          <div role="tabpanel" class="tab-pane" id="form3">ccc</div>
+        </div> 
+
+      </div>
+    </div>
+  </div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Profile Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Upload
+        <div class="image-upload">
+          {% include "core/upload.html" with user=user %}
+        </div>  
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

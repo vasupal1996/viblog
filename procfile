@@ -1,0 +1,1 @@
+web: gunicorn viblog.wsgi

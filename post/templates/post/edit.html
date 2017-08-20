@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load dractags %}
+{% block content %}
+{% block extrahead %}
+    <style>
+        .container-fluid{
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock extrahead %}
+
+<div class="container-fluid">
+    <form method="POST" action="" enctype="multipart/form-data"> {% csrf_token %}   
+        {{ form.media }}
+        {{ form|crispy }}
+        <button class="btn btn-info" type="submit" id="draft">Save Draft</button>
+        <button class="btn btn-primary" type="submit" id="publish">Publish</button>
+    </form>  
+</div>
+{% endblock content %}
+
+{% block script %}
+    <script src="{% static 'js/post.js' %}">
+    </script>
+{% endblock script %}

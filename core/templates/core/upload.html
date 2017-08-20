@@ -1,0 +1,32 @@
+
+{% load staticfiles %}
+
+
+  {# JQUERY FILE UPLOAD SCRIPTS #}
+  <!-- Latest compiled and minified CSS -->
+
+  <div style="margin-bottom: 20px;">
+  <div style="margin-bottom: 20px;">
+    <button type="button" class="btn btn-primary js-upload-photos">
+      <span class="glyphicon glyphicon-cloud-upload"></span> Upload photos
+    </button>
+    <input id="fileupload" type="file" name="file"
+           style="display: none;"
+           data-url="{% url 'core:image_profile' user %}"
+           data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+  </div>
+
+  <div class="modal fade" id="modal-progress" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Uploading...</h4>
+        </div>
+        <div class="modal-body">
+          <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

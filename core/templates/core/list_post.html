@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+  
+    
+       
+    <div class="container">
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th></th>
+                    </tr>
+                </thead>
+                {% for post in posts %}
+                <tbody>
+                    <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ post.title }}</td>
+                    <td><a href="{% url 'post:edit' post.slug %}"><button class="btn btn-primary" type="">Edit</button></a>
+                        <a href="{% url 'post:detail' post.slug %}"><button type="" class="btn btn-info">View</button></a>    
+                        <a href="{% url 'post:delete' post.slug %}"><button type="" class="btn btn-warning">Delete</button></a>
+                    {% if post.status == "D" %}
+                        <a href="{% url 'post:publish' post.slug %}"><button class="btn btn-outline-primary" type="">Publish</button></a>
+                    {% endif %}
+
+                    </td>
+
+                    </tr>
+                </tbody>
+                  {% endfor %}
+            </table>
+        </div>
+    </div>
+  
+{% endblock content %}
+

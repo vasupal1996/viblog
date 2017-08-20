@@ -1,0 +1,19 @@
+{% if comments %}
+    
+<h4>{{ comments|length }} Comment</h4> 
+{% for comment in comments %}
+<div class="list-group">
+  <div class="list-group-item list-group-item-action flex-column align-items-start">
+    <div class="d-flex w-100 justify-content-between">
+      {% comment %} <small class="text-muted">3 days ago</small> {% endcomment %}
+    </div>
+    <p class="mb-1">{{ comment }}.</p>
+    <small class="text-muted">{{ comment.user }}</small>
+  </div>
+</div>
+{% endfor %}
+
+{% else %}
+    <h6>No Comments</h6>
+{% endif %}
+

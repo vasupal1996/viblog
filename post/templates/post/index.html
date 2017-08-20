@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block extrahead %}
+
+<style>
+.portfolio-item {
+    margin-bottom: 30px;
+}
+
+.pagination {
+    margin-bottom: 30px;
+    
+}
+.row{
+    margin-top: 50px;
+}
+</style>
+{% endblock extrahead %}
+{% block content %}
+
+<div class="container">
+
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+                <div class="card h-100">
+                    {% comment %} <a href="#"><img class="img-fluid card-img-top" src="http://placehold.it/700x400" alt=""></a> {% endcomment %}
+                    <div class="card-block">
+                        <h5 class="card-title"><a href="{% url 'post:detail' post.slug %}">{{ post.title }}</a></h5>
+                        <p class="card-text">{{ post.get_summary_as_markdown |striptags }}</p>
+                    </div>
+                </div>
+            </div>
+             {% endfor %}          
+            </div>
+        </div>
+</div>
+
+{% endblock content %}

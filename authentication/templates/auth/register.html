@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% block content %}
+  
+    <div class="container col-md-5" style="margin-top:65px;">
+      <form class="form-signin" action="{% url 'register' %}" method="POST"> {% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+      </form>
+    </div> <!-- /container -->
+
+{% endblock content %}
+
+{% block footer %}
+  
+{% endblock footer %}
