@@ -44,6 +44,7 @@ class UserProfile(models.Model):
         
     def get_screen_name(self):
         try:
+            print ('HERE')
             if self.user.get_full_name():
                 return self.user.get_full_name
             else:
