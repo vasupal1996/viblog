@@ -29,7 +29,7 @@ class Post(models.Model):
         (PUBLISHED, 'Published'),
     )
 
-    title = models.CharField(max_length=255)
+    title = models.TextField()
     slug = models.SlugField()
     content = models.TextField()
     status = models.CharField(max_length=1, choices=STATUS, default=DRAFT)
