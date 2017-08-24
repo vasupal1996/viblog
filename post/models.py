@@ -31,7 +31,7 @@ class Post(models.Model):
         (PUBLISHED, 'Published'),
     )
 
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=500)
     slug = models.SlugField()
     content = models.TextField()
     status = models.CharField(max_length=1, choices=STATUS, default=DRAFT)
@@ -145,7 +145,7 @@ def create_slug(instance, new_slug=None):
     return slug
 
 class Tag(models.Model):
-    tag = models.CharField(max_length=50, null=True, blank=True)
+    tag = models.CharField(max_length=100, null=True, blank=True)
     post = models.ForeignKey(Post, null=True)    
 
     def __str__(self):
@@ -157,7 +157,7 @@ class Tag(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey(Post)
-    comment = models.CharField(max_length=500)
+    comment = models.CharField(max_length=1000)
     date_created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User) 
 
