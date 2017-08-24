@@ -21,8 +21,6 @@ from django.utils.module_loading import import_string
 
 from viblog.settings import MARKDOWNX_MARKDOWNIFY_FUNCTION
 
-
-
 class Post(models.Model):
     DRAFT = 'D'
     PUBLISHED = 'P'
