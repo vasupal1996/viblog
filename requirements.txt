@@ -1,5 +1,4 @@
 dj-database-url==0.4.2
-pillow
 beautifulsoup4
 Django==1.11.2
 django-crispy-forms==1.6.1
