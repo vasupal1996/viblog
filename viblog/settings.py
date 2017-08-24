@@ -90,22 +90,23 @@ WSGI_APPLICATION = 'viblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd1evbo7ifki46d',                   
+        'USER': 'lvymyscceovuce',
+        'PASSWORD': 'aeaac94b3f017d08a33cf316e055fff2021b6ca2742c6a0572b90bf4093a2415',
+        'HOST': 'ec2-107-22-211-182.compute-1.amazonaws.com',                      
+        'PORT': '5432',                    
     }
 }
-
-
-
-# import dj_database_url
-
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default='sqlite:////{0}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
-#     )
-# }
 
 
 
