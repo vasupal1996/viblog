@@ -2,20 +2,20 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 {% load dractags %}
-{% block content %}
+
 {% block extrahead %}
     <style>
-        .container-fluid{
-            margin-top: 20px;
-            margin-bottom: 20px;
+        .container{
+            margin-top: 40px;
+            margin-bottom: 40px;
         }
     </style>
 {% endblock extrahead %}
 
 
-
-<div class="container-fluid">
-    <form method="POST" action="" enctype="multipart/form-data"> {% csrf_token %}   
+{% block content %}
+<div class="container">
+    <form method="POST" action="" id="create-or-edit"  enctype="multipart/form-data"> {% csrf_token %}   
         {{ form.media }}
         {{ form|crispy }}
         <button class="btn btn-info" type="submit" id="draft">Save Draft</button>

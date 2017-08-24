@@ -28,9 +28,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+m7r0omm&zy1rb=by(p=p7pe*n1)fni@ka2+ht$y160z8dw!8p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = [*]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'markdownx',
     'draceditor',
     'crispy_forms',
+
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -89,22 +90,22 @@ WSGI_APPLICATION = 'viblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-
-
-import dj_database_url
-
 DATABASES = {
-    'default': dj_database_url.config(
-        default='sqlite:////{0}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
+
+
+
+# import dj_database_url
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='sqlite:////{0}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
+#     )
+# }
 
 
 
@@ -154,7 +155,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DRACEDITOR_MARKDOWN_SAFE_MODE = True 
 DRACEDITOR_UPLOAD_URL = '/api/'
-DRACEDITOR_UPLOAD_PATH = 'images/uploads/'
+DRACEDITOR_UPLOAD_PATH = 'articles/'
 
 
 LOGIN_URL = '/login/'

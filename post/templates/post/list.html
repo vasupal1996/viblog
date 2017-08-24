@@ -4,41 +4,68 @@
 
 {% block extrahead %}
     <style>
+            @import url('https://fonts.googleapis.com/css?family=Roboto|PT+Sans');
         .container{
             margin-top: 20px;
             -webkit-box-shadow: 0px 0px 7px 1px rgba(212,205,212,1);
             -moz-box-shadow: 0px 0px 7px 1px rgba(212,205,212,1);
             box-shadow: 0px 0px 3px 1px rgba(212,205,212,1);
-            border-radius: 7px 7px 7px 7px;
-            -moz-border-radius: 7px 7px 7px 7px;
-            -webkit-border-radius: 7px 7px 7px 7px;
+            border-radius: 3px 3px 3px 3px;
+            -moz-border-radius: 3px 3px 3px 3px;
+            -webkit-border-radius: 3px 3px 3px 3px;
             border: 0px solid #fafafa;
             padding: 20px;
+            padding-top: 30px;
             padding-left: 40px;
             padding-right: 40px;
+            margin-bottom: 30px;
         }
         .content{
             margin-left: 40px;
+            margin-right: 40px;
+            
+        }
+
+        .col-md-12 h3{
+            font-size: 30px;
+            font-family: 'PT Sans', sans-serif;
+        }
+        .content p{
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+
+        }
+
+        .activity button .active{
+            background-color: #ddd;
         }
     </style>
+    
+       
 {% endblock extrahead %}
 
 {% block content %}
   <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <h3 class="title">{{ post.title }}</h3>
-            <small>Author: {{ post.author }} | Created: {{ post.date_created }}</small>
+            <h3 class="title display-4">{{ post.title }}</h3>
+            <small class="lead" style="font-size: 16px;">Author: {{ post.author.get_full_name }} &nbsp | &nbsp {{ post.date_created }}</small>
             <hr>
             <div class="content">
                 {{ post.content|safe_markdown }}
             </div>
             <hr>
             <div class="tags">
-                <small><p>Tags: {% for tag in tags %}{{ tag }}{% endfor %}</small></p>
+                {% for tag in post.get_tags %}
+                <span class="badge badge-pill badge-primary">{{ tag }}</span>
+                {% endfor %}
             </div>
-                <button type="button" class="btn btn-secondary" id="like">Like</button>
-                <button type="button" class="btn btn-secondary" id="dislike">Dislike</button>
+            <br>
+            <div class="activity">
+                <button type="button" class="btn btn-secondary" id="like">Like <span class="count"></span></button>
+                <button type="button" class="btn btn-secondary" id="dislike">Dislike <span class="count"></span></button>
+            </div>
+               
             <br><br>
             <div class="comment">
       
@@ -65,6 +92,47 @@
 {% block script %}
 <script type="text/javascript">
 $(document).ready(function(){
+
+    function getlikes(){
+        $.ajax({
+            url: '{% url "get_like" %}',
+            data: {'post_slug': '{{ post.slug }}', 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            type: 'POST',
+            dataType: 'json',
+            success: function(data){
+                if (data.status){
+                    if (data.likes == 0){
+                        $('.activity #like .count').html('')
+                    }else{
+                        $('.activity #like .count').html(' | '+ data.likes)
+                    }   
+                }
+            }
+        });
+        
+    }
+    function getdislikes(){
+        $.ajax({
+            url: '{% url "get_dislike" %}',
+            data: {'post_slug': '{{ post.slug }}', 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            type: 'POST',
+            dataType: 'json',
+            success: function(data){
+                if (data.status){
+                    if (data.dislikes == 0){
+                        $('.activity #dislike .count').html('')
+                }else{
+                        $('.activity #dislike .count').html(' | '+ data.dislikes)
+                    }
+                    
+                }
+            }
+        });
+    }
+        getlikes()
+        getdislikes()
+        getUserActivity()
+
         $('#like').click(function(){
             $.ajax({
                 url: '/activity/',
@@ -77,14 +145,22 @@ $(document).ready(function(){
                 dataType: 'json',
                 success: function(data){
                     if (data.status == true){
-                        
+                        $('.activity button').removeClass('active')
+                        $('.activity #like').addClass('active')
+                        if (data.count == 0){
+                            $('.activity #like .count').html('')
+                        }else{
+                            $('.activity #like .count').html(' | '+ data.count)
+                        }
+                        {% comment %} getdislikes() {% endcomment %}
+                        getUserActivity()
                         }
                 }
             });
         });
         $('#dislike').click(function(){
             $.ajax({
-                url: '/activity/',
+                url: '{% url "post:activity" %}',
                 type: 'POST',
                 data: {
                     'post_slug': '{{ post.slug }}',
@@ -94,11 +170,44 @@ $(document).ready(function(){
                 dataType: 'json',
                 success: function(data){
                     if (data.status == true){
-                        
+                        $('.activity button').removeClass('active')
+                        $('.activity #dislike').addClass('active')
+                        if (data.count == 0){
+                            $('.activity #dislike .count').html('')
+                        }else{
+                            $('.activity #dislike .count').html(' | '+ data.count)
+                        }
+                        {% comment %} getlikes() {% endcomment %}
+                        getUserActivity()
                         }
                 }
             });
         });
+
+        function getUserActivity(){
+            $.ajax({
+              url: '{% url "user_activity" %}',
+              type: 'POST',
+              data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 
+              'post_slug': '{{ post.slug }}'
+            },
+              dataType: 'json',
+              success: function(data){
+                  if (data.status){
+                      if(data.atype == 'D'){
+                        $('.activity button').removeClass('active')
+                        $('.activity #dislike').addClass('active')
+                      }else if (data.atype == 'L'){
+                        $('.activity button').removeClass('active')
+                        $('.activity #like').addClass('active')
+                      }
+                  }else{
+                    $('.activity button').removeClass('active')
+                  }
+              }
+                
+            })
+        }
     }) ;
 </script>
 

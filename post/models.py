@@ -1,5 +1,13 @@
+import os
+
+from bs4 import BeautifulSoup
+from PIL import Image
+
+from django.conf import settings
+
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.core.files import File
 
 from django.db import models
 from django.db.models.signals import pre_save
@@ -12,6 +20,7 @@ from django.utils.text import slugify
 from django.utils.module_loading import import_string
 
 from viblog.settings import MARKDOWNX_MARKDOWNIFY_FUNCTION
+
 
 
 class Post(models.Model):
@@ -39,9 +48,16 @@ class Post(models.Model):
         # ordering = ('-date_created','-date_updated')
 
     def get_posts(author):
-        posts = get_list_or_404(Post, author = author)
-        return posts
-
+        try:
+            list_posts = Post.objects.filter(author=author)
+            print (list_posts)
+            if list_posts is not None:
+                return list_posts
+            else:
+                return False
+        except Exception:
+            return False
+            
     def get_absolute_url(self):
         return reverse('post:detail', kwargs={'slug': self.slug})
 
@@ -65,7 +81,7 @@ class Post(models.Model):
 
     def get_summary(self):
         if len(self.content) > 150:
-            return '{0}...'.format(self.content[:150])
+            return '{0}...'.format(self.content[:350])
         else:
             return self.content
     
@@ -73,8 +89,29 @@ class Post(models.Model):
         markdownify = import_string(MARKDOWNX_MARKDOWNIFY_FUNCTION)
         return markdownify(self.get_summary())
 
+    def get_thumbnail(self):    
+        # markdownify = import_string(MARKDOWNX_MARKDOWNIFY_FUNCTION)
+        # content = BeautifulSoup(markdownify(self.content))
 
-#    def get_thumnail(self):
+        # try:
+        #     img_link = content.findAll('img')[0].get('src')
+        #     print (img_link)
+        # except:
+        #     img_link = 'http://howtorecordpodcasts.com/wp-content/uploads/2012/10/YouTube-Background-Pop-4.jpg'
+        # return img_link
+        markdownify = import_string(MARKDOWNX_MARKDOWNIFY_FUNCTION)
+        content = BeautifulSoup(markdownify(self.content), "html5lib")
+        try:
+            img_link = content.findAll('img')[0].get('src')
+        except:
+            img_link = 'http://howtorecordpodcasts.com/wp-content/uploads/2012/10/YouTube-Background-Pop-4.jpg'
+        return img_link
+
+
+    # def get_likes(self, atype):
+    #     values = Activity.objects.filter(activity_type = atype, post=post).count()
+    #     return (values)
+
         
     # def get_likes(self):
     #     t = Activity.calculate_activity(self, atype='L')
@@ -103,12 +140,12 @@ def create_slug(instance, new_slug=None):
         slug = new_slug
     qs = Post.objects.filter(slug=slug).order_by('-id')
     if qs.exists():
-        new_slug = "%s-%s" %(slug, qs.first().id)
+        new_slug = "%s%s" %(slug, qs.first().id)
         return create_slug(instance, new_slug=new_slug)
     return slug
 
 class Tag(models.Model):
-    tag = models.CharField(max_length=50)
+    tag = models.CharField(max_length=50, null=True, blank=True)
     post = models.ForeignKey(Post, null=True)    
 
     def __str__(self):

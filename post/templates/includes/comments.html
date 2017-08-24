@@ -1,19 +1,32 @@
 {% if comments %}
     
-<h4>{{ comments|length }} Comment</h4> 
+<h4>{{ comments|length }} Comment</h4><br> 
 {% for comment in comments %}
-<div class="list-group">
+{% comment %} <div class="">
   <div class="list-group-item list-group-item-action flex-column align-items-start">
     <div class="d-flex w-100 justify-content-between">
-      {% comment %} <small class="text-muted">3 days ago</small> {% endcomment %}
+      <small class="text-muted">3 days ago</small>
     </div>
     <p class="mb-1">{{ comment }}.</p>
-    <small class="text-muted">{{ comment.user }}</small>
+    <small class="text-muted"> -- {{  comment.user.get_full_name }}</small>
   </div>
+</div> {% endcomment %}
+<div class="comment mb-2 row">
+    <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
+        <img class="mx-auto rounded-circle img-fluid" src="{{ comment.user.userprofile.get_profile_picture_url }}"> 
+    </div>
+    <div class="comment-content col-md-11 col-sm-10">
+        <h6 class="small comment-meta">{{ comment.user.get_full_name }} | {{ comment.date_created }}</h6>
+        <div class="comment-body">
+            <p>{{ comment }}
+                <br>
+                {% comment %} <a href="" class="text-right small"><i class="ion-reply"></i> Reply</a> {% endcomment %}
+            </p>
+        </div>
+    </div>
 </div>
 {% endfor %}
 
 {% else %}
     <h6>No Comments</h6>
 {% endif %}
-

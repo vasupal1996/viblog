@@ -7,6 +7,24 @@
     margin-bottom: 30px;
 }
 
+.card{
+    box-shadow: 0 3px 6px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,0.23);
+}
+
+
+.card-footer{
+    background-color:#006699;
+    
+}
+
+.text-muted{
+    color: #eceeef !important;
+}
+
+.card-header > a{
+    color: #101010;
+}
+
 .pagination {
     margin-bottom: 30px;
     
@@ -23,11 +41,16 @@
         <div class="row">
             {% for post in posts %}
             <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
-                <div class="card h-100">
-                    {% comment %} <a href="#"><img class="img-fluid card-img-top" src="http://placehold.it/700x400" alt=""></a> {% endcomment %}
-                    <div class="card-block">
-                        <h5 class="card-title"><a href="{% url 'post:detail' post.slug %}">{{ post.title }}</a></h5>
-                        <p class="card-text">{{ post.get_summary_as_markdown |striptags }}</p>
+                <div class="card h-100 card mb-3">
+                {% comment %} <a href=""><img class="img-fluid card-img-top" name="post-thumbnail" src="{{ post.get_thumbnail }}" alt=""></a> {% endcomment %}
+                <h6 class="card-header"><a href="{% url 'post:detail' post.slug %}">{{ post.title }}</a></h6>    
+                <div class="card-block" style="padding: 10px;">
+                        <small class="card-text">{{ post.get_summary_as_markdown |striptags|truncatechars:150 }}</small>      
+                    </div>  
+                    <div class="card-footer">
+                            <small class="card-subtitle mb-2 text-muted">{{  post.date_created }} | </small> 
+                            
+                            <small class="text-muted text-right">By: {{ post.author.get_full_name }}</small>
                     </div>
                 </div>
             </div>
@@ -35,5 +58,30 @@
             </div>
         </div>
 </div>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+
+
+        {% if posts.has_previous %}
+            {% comment %} <a href="?page={{ posts.previous_page_number }}">previous</a> {% endcomment %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.previous_page_number }}" tabindex="-1">Previous</a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+        {% endif %}
+
+          <li class="page-item"><a class="page-link" href="?page={{ posts.number }}">{{ posts.number }}</a></li>
+
+        {% if posts.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ posts.next_page_number }}">Next</a>
+            </li>
+        {% endif %}
+        </ul>
+    </nav>
 
 {% endblock content %}

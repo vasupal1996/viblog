@@ -1,5 +1,6 @@
 <div class="profile-image">
 <h5>Profile Picture</h5><br>
-    <img src="{{ user.userprofile.profile_image.url }}" name='profile' alt="" class="img-fluid">
+
+    <img width="200px" height="200px" src="{{ user.userprofile.get_profile_picture_url }}" name='profile' alt="" class="img-fluid">
     <hr>          
 </div>

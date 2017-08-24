@@ -1,5 +1,7 @@
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, JsonResponse
 from .forms import RegisterForm
 
 def register(request):
@@ -11,7 +13,72 @@ def register(request):
         return render (request, 'auth/register.html', context)
     else:
         if form.is_valid():
-            form.save()
-            return redirect('login')
+            user = form.save(commit=False)
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+
+            user.set_password(password)
+            user.save()
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                if user.is_active:
+                    return redirect('login')
+                else:
+                    return HttpResponseBadRequest('User Not Active')
+            else:
+                return HttpResponseBadRequest('User Not Found')
         else:
             return HttpResponseBadRequest()
+
+def check_username(request):
+    username = request.POST.get('username')
+    print (username)
+    context = {}
+    try:
+        username = User.objects.get(username=username)
+        print ('username')
+        if username:
+            status = True
+        else:
+            status = False
+    except Exception:
+        status = False
+    
+    if status:
+        context = {
+            'status': True,
+            'message': 'Username is Already Taken'
+        }
+    else:
+        context = {
+            'status': False,
+            'message': 'Username Available  '
+        }
+    return JsonResponse(context)
+
+def check_email(request):
+    email = request.POST.get('email')
+    print (email)
+    context = {}
+    try:
+        email = User.objects.get(email=email)
+        print ('email')
+        if email:
+            status = True
+        else:
+            status = False
+    except Exception:
+        print ('HEER')
+        status = False
+    
+    if status:
+        context = {
+            'status': True,
+            'message': 'Email is Already Registered. Please Login for this email.'
+        }
+    else:
+        context = {
+            'status': False,
+            'message': ''
+        }
+    return JsonResponse(context)

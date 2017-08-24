@@ -8,6 +8,11 @@ class CreatePost(forms.ModelForm):
     content = DraceditorFormField()
     status = forms.CharField(widget=forms.HiddenInput())
     tags = forms.CharField(widget=forms.TextInput(), max_length=250, help_text = "Use ',' to seperate tags. For example 'tag1,tag2,tag3'")
+    
     class Meta: 
         model = Post
         fields = ['status', 'title', 'content','tags']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['status'].initial =  'D'

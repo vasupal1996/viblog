@@ -3,15 +3,11 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 
-from post.models import  Tag
-
-
 def image_upload_location(instance, filename):
     user = instance.user
     pk = instance.pk
-    profile = 'profile'
-    return "%s/%s/%s" %(user,profile,filename)
-
+    profile = 'profile-images'
+    return "%s/%s/%s" %(profile, user, filename)
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
@@ -22,16 +18,38 @@ class UserProfile(models.Model):
     url = models.CharField(max_length=50, null=True, blank=True)
     mobile = models.IntegerField(blank=True, null=True)
     alternate_email = models.EmailField(blank=True, null=True)
-    intro_slogan = models.CharField(max_length=75, null=True, blank=True)
+    #intro_slogan = models.CharField(max_length=75, null=True, blank=True)
 
     def __str__(self):
-        return str(self.user)    
+        return str(self.user.username)
 
+    # def get_profile_url(self):
+    #     try:
+    #         if self.url:
+    #             if "http://" not in self.url and "https://" not in self.url and len(self.url) > 0:
+    #                 return "https://"+ str(self.url)
+    #     except Exception:
+    #         return "https://"+ str(self.user.username)
 
-    def get_profile_image(self):
-        image = self.profile_image
-        image = image.url
-        return image
+    def get_profile_picture_url(self):
+        try:
+            if self.profile_image:
+                profile_picture = (self.profile_image).url
+                return profile_picture
+            else:
+                profile_picture = 'https://d30y9cdsu7xlg0.cloudfront.net/png/363633-200.png'
+                return profile_picture
+        except Exception:
+            return 'https://d30y9cdsu7xlg0.cloudfront.net/png/363633-200.png'
+        
+    def get_screen_name(self):
+        try:
+            if self.user.get_full_name():
+                return self.user.get_full_name
+            else:
+                return self.user.username
+        except Exception:
+            return self.user.username
 
 def create_user_profile(sender, instance, created, *args, **kwargs):
     if created:

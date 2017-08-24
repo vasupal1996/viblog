@@ -4,6 +4,10 @@
 {% block content %}
   
     <div class="container col-md-5" style="margin-top:65px;">
+      <div class="messages">
+          <div class="alert">
+          </div>
+        </div>
       <form class="form-signin" action="{% url 'register' %}" method="POST"> {% csrf_token %}
         {{ form|crispy }}
         <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
@@ -12,6 +16,50 @@
 
 {% endblock content %}
 
-{% block footer %}
+{% block script %}
   
-{% endblock footer %}
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#id_email').change(function(){
+      var email = $(this).val();
+      $.ajax({
+        url: '{% url "check:email" %}',
+        type: 'POST',
+        data: {'email': email,
+        csrfmiddlewaretoken: '{{ csrf_token }}'},
+        dataType: 'json',
+        success: function(data){
+          if (data.status){
+            $('.messages > div').html('<lead>'+ data.message +'</lead>')
+          }else{
+            $('.messages > div').html('<lead>'+ data.message +'</lead>')
+          
+          }
+        }
+
+      });
+    });
+
+    $('#id_username').change(function(){
+      var username = $(this).val();
+      $.ajax({
+        url: '{% url "check:username" %}',
+        type: 'POST',
+        data: {'username': username,
+        csrfmiddlewaretoken: '{{ csrf_token }}'},
+        dataType: 'json',
+        success: function(data){
+          if (data.status){
+            $('.messages > div').html('<lead>'+ data.message +'</lead>')
+          }else{
+            $('.messages > div').html('<lead>'+ data.message +'</lead>')
+          
+          }
+        }
+
+      });
+    });
+  });
+</script>
+
+{% endblock script %}

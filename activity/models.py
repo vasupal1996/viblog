@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
-from post.models import Post , Tag
+from post.models import Post
 
 
 
