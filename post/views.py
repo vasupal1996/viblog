@@ -3,6 +3,7 @@ import json
 import uuid
 
 from django.conf import settings
+from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
@@ -24,12 +25,8 @@ from draceditor.utils import LazyEncoder
 
 def home(request):
     user = request.user
-    # favourites = Favourites.objects.filter(user=user)
-    # posts = Tag.objects.filter(tag__icontains=favourites)
-
-    post_list = Post.objects.all().order_by('-date_created').filter(status='P') 
-    paginator = Paginator(post_list, 12) # Show 25 contacts per page
-
+    post_list = Post.objects.all().filter(status='P')#.order_by("-date_created")
+    paginator = Paginator(post_list, 12)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -47,6 +44,26 @@ def home(request):
     }
     return render(request, 'post/index.html', context)
 
+
+# def load_post(request):
+#     user = request.user
+#     page = int(request.POST.get('next_page_number'))
+#     post_list = Post.objects.all().filter(status='P').order_by("-date_created")
+#     paginator = Paginator(post_list, 1) # Show 25 contacts per page
+#     try:
+#         posts = paginator.page(page)
+#     except PageNotAnInteger:
+#         # If page is not an integer, deliver first page.
+#         posts = paginator.page(1)
+#     except EmptyPage:
+#         # If page is out of range (e.g. 9999), deliver last page of results.
+#         posts = paginator.page(paginator.num_pages)
+#         return HttpResponseBadRequest('No Page Found')
+
+#     context = {
+#         'posts': posts,
+#     }
+#     return render(request, 'includes/post.html', context)
 
 @login_required
 def draft_or_publish_post(request):
@@ -104,7 +121,7 @@ def create_or_edit_post(request, slug=None):
     else:
         return HttpResponseBadRequest("Invalid Request")
     
-def api(request):
+def image_upload(request):
     if request.method == 'POST' and request.is_ajax():
         
         if 'markdown-image-upload' in request.FILES:
@@ -120,7 +137,6 @@ def api(request):
                 }, cls=LazyEncoder)
                 return HttpResponse(data, content_type='application/json', status=405)
 
-            
             img_key = uuid.uuid4().hex[:10]
             img_path = settings.DRACEDITOR_UPLOAD_PATH + str(request.user.username) 
 
@@ -183,8 +199,7 @@ def activity(request):
             else:
                 like.delete()
         else:
-            print ('here2')
-            return redirect('post:home')
+            return HttpResponseBadRequest()
 
         if status:
             Activity.create_activity(user, post, atype)
@@ -202,8 +217,7 @@ def activity(request):
 @login_required
 def publish(request, slug):
     post = get_object_or_404(Post, slug=slug)
-    if post.status is 'D':
-        print ('here')        
+    if post.status is 'D':       
         post.status = 'P'
         post.save()
         return redirect('core:list_posts', username=request.user.username)
@@ -213,10 +227,11 @@ def publish(request, slug):
 
 @login_required
 def delete(request, slug):
-    print ('into function')
-    post = get_object_or_404(Post, slug=slug)
-    print ('HERE')
-    post.delete()
+    try:
+        post = get_object_or_404(Post, slug=slug)
+        post.delete()
+    except Exception:
+        pass
     return redirect('core:list_posts', username=request.user.username)
 
 @login_required
@@ -224,8 +239,12 @@ def comment(request, slug):
     if request.method == 'POST':
         user = request.user
         post = get_object_or_404(Post, slug=slug)
-        comment = request.POST.get('comment')
-        Post.create_comments(post, user, comment)
-        return redirect('post:detail', slug=slug)
+        try:
+            user = User.objects.get(username=user.username)
+            comment = request.POST.get('comment')
+            Post.create_comments(post, user, comment)
+            return redirect('post:detail', slug=slug)
+        except Exception:
+            return redirect('post:detail', slug=slug)
     else:
         return HttpResponseBadRequest()

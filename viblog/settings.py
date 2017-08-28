@@ -30,7 +30,7 @@ SECRET_KEY = '+m7r0omm&zy1rb=by(p=p7pe*n1)fni@ka2+ht$y160z8dw!8p'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['vilog.herokuapp.com']
+ALLOWED_HOSTS = ['vilog.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'post',
     'activity',
     'core',
+    'search',
 
     'markdownx',
     'draceditor',
@@ -147,16 +148,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticroot')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 DRACEDITOR_MARKDOWN_SAFE_MODE = True 
-DRACEDITOR_UPLOAD_URL = '/api/'
+DRACEDITOR_UPLOAD_URL = '/upload/'
 DRACEDITOR_UPLOAD_PATH = 'articles/'
 
 

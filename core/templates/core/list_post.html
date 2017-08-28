@@ -42,7 +42,7 @@
         </div>
     </div>
     
-
+    {% if posts.has_previous or posts.has_next %}
     <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
     
@@ -67,6 +67,6 @@
             {% endif %}
             </ul>
         </nav>
-  
+        {% endif %}
 {% endblock content %}
 

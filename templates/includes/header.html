@@ -14,6 +14,17 @@
         <a class="nav-link" href="{% url 'post:home' %}">Home <span class="sr-only">(current)</span></a>
       </li>
     </ul>
+    <div class="col-md-4" style="margin-right: 460px;">
+        <div class="input-group">
+          <form role="search" class="input-group" action="{% url 'search:search_query' %}" method="GET">
+              <input type="text" name="q" class="form-control" placeholder="Search for..." value="{{ request.GET.q }}">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="submit">Go!</button>
+              </span>
+          </form>
+   
+        </div>
+      </div>
     <ul class="navbar-nav">
       {% if request.user.is_authenticated %}
       <li class="nav-item">

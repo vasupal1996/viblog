@@ -32,11 +32,9 @@ def register(request):
 
 def check_username(request):
     username = request.POST.get('username')
-    print (username)
     context = {}
     try:
         username = User.objects.get(username=username)
-        print ('username')
         if username:
             status = True
         else:
@@ -58,17 +56,14 @@ def check_username(request):
 
 def check_email(request):
     email = request.POST.get('email')
-    print (email)
     context = {}
     try:
         email = User.objects.get(email=email)
-        print ('email')
         if email:
             status = True
         else:
             status = False
     except Exception:
-        print ('HEER')
         status = False
     
     if status:

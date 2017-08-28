@@ -44,20 +44,25 @@ class UserProfile(models.Model):
         
     def get_screen_name(self):
         try:
-            print ('HERE')
             if self.user.get_full_name():
-                return self.user.get_full_name
+                return self.user.get_full_name()
             else:
                 return self.user.username
         except Exception:
             return self.user.username
 
 def create_user_profile(sender, instance, created, *args, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
+    try:
+        if created:
+            UserProfile.objects.create(user=instance)
+    except Exception:
+        pass
 
 def save_user_profile(sender, instance, *args, **kwargs):
-    instance.userprofile.save()
+    try:
+        instance.userprofile.save()
+    except Exception:
+        pass
 
 post_save.connect(create_user_profile, sender=User)
 post_save.connect(save_user_profile, sender=User)

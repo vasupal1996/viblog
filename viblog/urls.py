@@ -4,8 +4,10 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
+import os
 from authentication.views import register
 from activity.views import get_dislike, get_like, user_activity
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -21,10 +23,13 @@ urlpatterns = [
     url(r'^activity/like/$', get_like, name='get_like'),
     url(r'^activity/dislike/$', get_dislike, name='get_dislike'),
     url(r'^activity/user/$', user_activity, name='user_activity'),
-
+    
     url(r'^settings/', include('core.urls', namespace='core')),
     url(r'^check/', include('authentication.urls', namespace='check')),
+    url(r'^search/', include('search.urls', namespace='search')),
     url(r'^', include('post.urls', namespace='post')),
+    #url(r'^static/(.*)$', 'django.views.static.serve', {'document_root':           
+    #os.path.join(os.path.dirname(__file__), 'static')}),
 
  
 ]

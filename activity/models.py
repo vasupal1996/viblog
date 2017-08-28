@@ -27,9 +27,9 @@ class Activity(models.Model):
 
     def create_activity(user, post, atype):
         if user in User.objects.filter(username=user.username):
-            print ('here')
+          
             if (atype == 'L' or atype == 'D'):    
-                print('here1')
+                
                 activity = Activity()
                 activity.user = user
                 activity.activity_type = atype

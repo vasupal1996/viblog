@@ -38,33 +38,21 @@
 
 <div class="container">
 
-        <div class="row">
-            {% for post in posts %}
-            <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
-                <div class="card h-100 card mb-3">
-                {% comment %} <a href=""><img class="img-fluid card-img-top" name="post-thumbnail" src="{{ post.get_thumbnail }}" alt=""></a> {% endcomment %}
-                <h6 class="card-header"><a href="{% url 'post:detail' post.slug %}">{{ post.title }}</a></h6>    
-                <div class="card-block" style="padding: 10px;">
-                        <small class="card-text">{{ post.get_summary_as_markdown |striptags|truncatechars:150 }}</small>      
-                    </div>  
-                    <div class="card-footer">
-                            <small class="card-subtitle mb-2 text-muted">{{  post.date_created }} | </small> 
-                            
-                            <small class="text-muted text-right">By: {{ post.author.userprofile.get_screen_name }}</small>
-                    </div>
-                </div>
-            </div>
-             {% endfor %}          
-            </div>
+        <div class="row posts">
+            {% include "includes/post.html" with posts=posts user=user %}
         </div>
+        <!-- <div class="row">
+            <div class="col-md-2 offset-md-5">
+                    <button type="submit" id="load" class="btn btn-primary">Load More</button>                    
+            </div>
+        </div> -->
 </div>
 
+    {% if posts.has_previous  or posts.has_next %}
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-
-
         {% if posts.has_previous %}
-            {% comment %} <a href="?page={{ posts.previous_page_number }}">previous</a> {% endcomment %}
+            <!-- <a href="?page={{ posts.previous_page_number }}">previous</a> -->
             <li class="page-item">
                 <a class="page-link" href="?page={{ posts.previous_page_number }}" tabindex="-1">Previous</a>
             </li>
@@ -83,5 +71,31 @@
         {% endif %}
         </ul>
     </nav>
-
+    {% endif %}
 {% endblock content %}
+
+
+{% comment %}
+{% block script %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#load').click(function(){
+            var next_page = $('input[name="next_page"]').val()
+            $.ajax({
+            url: '{% url "post:load_post" %}',
+            type: 'POST',
+            data: {'csrfmiddlewaretoken': '{{ csrf_token }}',
+            'next_page_number': next_page,
+                },
+            success: function(data){
+                $('.posts button').remove()
+                $('input[name="next_page"]').remove()
+                $('.posts').append(data)
+                }, 
+            });
+        });
+    });
+</script>
+
+{% endblock script %}  
+{% endcomment %}

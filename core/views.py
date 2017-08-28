@@ -1,6 +1,7 @@
 from PIL import Image
 from bs4 import BeautifulSoup
 import os
+import django
 
 from django.core.files import File
 
@@ -23,6 +24,9 @@ from post.models import Post
 
 from viblog.settings import MARKDOWNX_MARKDOWNIFY_FUNCTION
 from django.utils.module_loading import import_string
+
+
+EXTENSION = ['jpg', 'png', 'jpeg']
 
 @login_required
 def profile(request, username):
@@ -63,14 +67,30 @@ def image_profile(request, username):
     user = request.user
     if request.method == "POST":
         image = request.FILES.get('file')
+        file_path = settings.BASE_DIR + settings.MEDIA_URL + 'profile-images/' + user.username
         user.userprofile.profile_image = image
         user.save()
-        # context = {
-        #     'user': user.userprofile,
-        # }
-        # html = ''
-        # html = '{0}{1}'.format(html, render_to_string('core/profile_image.html', context))
-        # return HttpResponse(html)
+        file_name = user.userprofile.profile_image.url
+        file_name = file_name.split('/')[-1]
+        im = Image.open(file_path + '/' + file_name)
+        width, height = (im.size)
+        if width > height:
+            x = 0 + int((width-height))/2
+            y = 0
+            w = width - int((width-height))/2
+            h = height
+        elif height > width:
+            x = 0
+            y = 0 + (height - width)/2
+            w = width
+            h = height - (height - width)/2
+        else:
+            pass
+        try:
+            im = im.crop((x, y, w, h))
+        except: 
+            pass
+        im.save(file_path + '/' + file_name)
         return HttpResponse(True)
     else:
         image_url = user.userprofile.get_profile_picture_url
@@ -103,21 +123,54 @@ def list_posts(request, username):
         return render(request, 'core/list_post.html', context)
 
 
-def create_thumbnail(request):
-    slug = 'yftguhjkn'
+# def create_thumbnail(request):
+    slug = 'samsung-galaxy-note8-hands-on-review'
     post = get_object_or_404(Post, slug=slug)
     if post:
         markdownify = import_string(MARKDOWNX_MARKDOWNIFY_FUNCTION)
         content = BeautifulSoup(markdownify(post.content), "html5lib")
-        #try:
-        img_link = content.findAll('img')[0].get('src')
-        print(img_link)
-        filename = img_link.split('/')[-1]
-        filename = filename.split('.')[0]
-        file_path = settings.MEDIA_URL + settings.DRACEDITOR_UPLOAD_PATH + post.author.username + '/' + filename + '.jpg'
-        print (file_path)
-        im = Image.open(file_path)
-        print (img)
-        #except:
-            #img_link = 'http://howtorecordpodcasts.com/wp-content/uploads/2012/10/YouTube-Background-Pop-4.jpg'
-        return HttpResponse(file_path)
+        try:
+            img_link = content.findAll('img')[0].get('src')
+            file_path = settings.BASE_DIR + img_link
+            file_full_name = img_link.split('/')[-1]
+            file_name, extension = file_path.split('.')
+            file_name = file_name.split('/')[-1]
+            try:
+                if extension in EXTENSION:
+                    username = post.author.username
+                    new_file_path = settings.BASE_DIR + settings.STATIC_URL + 'media' + '/' + settings.DRACEDITOR_UPLOAD_PATH + post.author.username + '/' + post.slug + '/'
+                    new_file_name = new_file_path + file_name + '-thumbnail'
+                    if not os.path.exists(new_file_path):
+                        print ('HERE')
+                        os.makedirs(new_file_path)
+                    im = Image.open(file_path)
+                    width, height = (im.size)
+                    if width > height:
+                        x = 0 + int((width-height))/2
+                        y = 0
+                        w = width - int((width-height))/2
+                        h = height
+                    elif height > width:
+                        x = 0
+                        y = 0 + (height - width)/2
+                        w = width
+                        h = height - (height - width)/2
+                    else:
+                        pass
+                    im = im.crop((x, y, w, h))
+                  
+                    width, height = (im.size)
+                    im.save(new_file_name + '.' + extension)
+                    
+            except:
+                raise Exception('Please Upload Correcct Image Format')
+        except:
+            img_link = 'http://howtorecordpodcasts.com/wp-content/uploads/2012/10/YouTube-Background-Pop-4.jpg'
+        
+        context = {
+            'post': post, 
+            'username': post.author.username,
+            'file': new_file_name + '.' + extension,
+        }
+        
+        return render(request, 'core/example.html', context)

@@ -16,7 +16,7 @@
         <img class="mx-auto rounded-circle img-fluid" src="{{ comment.user.userprofile.get_profile_picture_url }}"> 
     </div>
     <div class="comment-content col-md-11 col-sm-10">
-        <h6 class="small comment-meta">{{ comment.user.get_full_name }} | {{ comment.date_created }}</h6>
+        <h6 class="small comment-meta">{{ comment.user.userprofile.get_screen_name }} | {{ comment.date_created }}</h6>
         <div class="comment-body">
             <p>{{ comment }}
                 <br>

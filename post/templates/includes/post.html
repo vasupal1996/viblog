@@ -1,0 +1,17 @@
+{% for post in posts %}
+<div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
+    <div class="card h-100 card mb-3">
+    {% comment %} <a href=""><img class="img-fluid card-img-top" name="post-thumbnail" src="{{ post.get_thumbnail }}" alt=""></a> {% endcomment %}
+    <h6 class="card-header"><a href="{% url 'post:detail' post.slug %}">{{ post.title }}</a></h6>    
+    <div class="card-block" style="padding: 10px;">
+            <small class="card-text">{{ post.get_summary_as_markdown |striptags|truncatechars:200 }}</small>      
+        </div>  
+        <div class="card-footer">
+                <small class="card-subtitle mb-2 text-muted">{{  post.date_created }} | </small> 
+                
+                <small class="text-muted text-right">By: {{ post.author.userprofile.get_screen_name }}</small>
+        </div>
+    </div>
+</div>
+ {% endfor %}
+ <!-- <input type="hidden" name="next_page" value="{% if posts.has_next %}{{ posts.next_page_number }}{% else %}-1{% endif %}"> -->

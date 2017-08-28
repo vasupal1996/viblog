@@ -7,7 +7,6 @@ $(function () {
   $("#fileupload").fileupload({
     dataType: 'json',
     start: function (e) {
-     
     },
 
     stop: function (e) {

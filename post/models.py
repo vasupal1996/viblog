@@ -43,12 +43,12 @@ class Post(models.Model):
     class Meta:
         verbose_name = _("Post")
         verbose_name_plural = _("Posts")
-        # ordering = ('-date_created','-date_updated')
+        ordering = ('-date_updated','-date_created', '-pk')
 
     def get_posts(author):
         try:
             list_posts = Post.objects.filter(author=author)
-            print (list_posts)
+           
             if list_posts is not None:
                 return list_posts
             else:
@@ -153,6 +153,7 @@ class Tag(models.Model):
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
 
+            
 class Comment(models.Model):
     post = models.ForeignKey(Post)
     comment = models.CharField(max_length=1000)
