@@ -124,53 +124,53 @@ def list_posts(request, username):
 
 
 # def create_thumbnail(request):
-    slug = 'samsung-galaxy-note8-hands-on-review'
-    post = get_object_or_404(Post, slug=slug)
-    if post:
-        markdownify = import_string(MARKDOWNX_MARKDOWNIFY_FUNCTION)
-        content = BeautifulSoup(markdownify(post.content), "html5lib")
-        try:
-            img_link = content.findAll('img')[0].get('src')
-            file_path = settings.BASE_DIR + img_link
-            file_full_name = img_link.split('/')[-1]
-            file_name, extension = file_path.split('.')
-            file_name = file_name.split('/')[-1]
-            try:
-                if extension in EXTENSION:
-                    username = post.author.username
-                    new_file_path = settings.BASE_DIR + settings.STATIC_URL + 'media' + '/' + settings.DRACEDITOR_UPLOAD_PATH + post.author.username + '/' + post.slug + '/'
-                    new_file_name = new_file_path + file_name + '-thumbnail'
-                    if not os.path.exists(new_file_path):
-                        print ('HERE')
-                        os.makedirs(new_file_path)
-                    im = Image.open(file_path)
-                    width, height = (im.size)
-                    if width > height:
-                        x = 0 + int((width-height))/2
-                        y = 0
-                        w = width - int((width-height))/2
-                        h = height
-                    elif height > width:
-                        x = 0
-                        y = 0 + (height - width)/2
-                        w = width
-                        h = height - (height - width)/2
-                    else:
-                        pass
-                    im = im.crop((x, y, w, h))
+    # slug = 'samsung-galaxy-note8-hands-on-review'
+    # post = get_object_or_404(Post, slug=slug)
+    # if post:
+    #     markdownify = import_string(MARKDOWNX_MARKDOWNIFY_FUNCTION)
+    #     content = BeautifulSoup(markdownify(post.content), "html5lib")
+    #     try:
+    #         img_link = content.findAll('img')[0].get('src')
+    #         file_path = settings.BASE_DIR + img_link
+    #         file_full_name = img_link.split('/')[-1]
+    #         file_name, extension = file_path.split('.')
+    #         file_name = file_name.split('/')[-1]
+    #         try:
+    #             if extension in EXTENSION:
+    #                 username = post.author.username
+    #                 new_file_path = settings.BASE_DIR + settings.STATIC_URL + 'media' + '/' + settings.DRACEDITOR_UPLOAD_PATH + post.author.username + '/' + post.slug + '/'
+    #                 new_file_name = new_file_path + file_name + '-thumbnail'
+    #                 if not os.path.exists(new_file_path):
+    #                     print ('HERE')
+    #                     os.makedirs(new_file_path)
+    #                 im = Image.open(file_path)
+    #                 width, height = (im.size)
+    #                 if width > height:
+    #                     x = 0 + int((width-height))/2
+    #                     y = 0
+    #                     w = width - int((width-height))/2
+    #                     h = height
+    #                 elif height > width:
+    #                     x = 0
+    #                     y = 0 + (height - width)/2
+    #                     w = width
+    #                     h = height - (height - width)/2
+    #                 else:
+    #                     pass
+    #                 im = im.crop((x, y, w, h))
                   
-                    width, height = (im.size)
-                    im.save(new_file_name + '.' + extension)
+    #                 width, height = (im.size)
+    #                 im.save(new_file_name + '.' + extension)
                     
-            except:
-                raise Exception('Please Upload Correcct Image Format')
-        except:
-            img_link = 'http://howtorecordpodcasts.com/wp-content/uploads/2012/10/YouTube-Background-Pop-4.jpg'
+    #         except:
+    #             raise Exception('Please Upload Correcct Image Format')
+    #     except:
+    #         img_link = 'http://howtorecordpodcasts.com/wp-content/uploads/2012/10/YouTube-Background-Pop-4.jpg'
         
-        context = {
-            'post': post, 
-            'username': post.author.username,
-            'file': new_file_name + '.' + extension,
-        }
+    #     context = {
+    #         'post': post, 
+    #         'username': post.author.username,
+    #         'file': new_file_name + '.' + extension,
+    #     }
         
-        return render(request, 'core/example.html', context)
+    #     return render(request, 'core/example.html', context)
