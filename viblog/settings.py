@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+m7r0omm&zy1rb=by(p=p7pe*n1)fni@ka2+ht$y160z8dw!8p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['vilog.herokuapp.com', '127.0.0.1']
 
@@ -91,23 +91,23 @@ WSGI_APPLICATION = 'viblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'dmtn8rqifh4ii',                   
-#         'USER': 'wswplfrzkzxzwl',
-#         'PASSWORD': 'e3a283b6328309276d9111b3580f8e3f87a7ee5e4b3fdd82671d9e649de73731',
-#         'HOST': 'ec2-54-235-102-25.compute-1.amazonaws.com',                      
-#         'PORT': '5432',                    
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dmtn8rqifh4ii',                   
+        'USER': 'wswplfrzkzxzwl',
+        'PASSWORD': 'e3a283b6328309276d9111b3580f8e3f87a7ee5e4b3fdd82671d9e649de73731',
+        'HOST': 'ec2-54-235-102-25.compute-1.amazonaws.com',                      
+        'PORT': '5432',                    
+    }
+}
 
 
 
@@ -148,9 +148,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
