@@ -101,10 +101,10 @@ WSGI_APPLICATION = 'viblog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dmtn8rqifh4ii',                   
-        'USER': 'wswplfrzkzxzwl',
-        'PASSWORD': 'e3a283b6328309276d9111b3580f8e3f87a7ee5e4b3fdd82671d9e649de73731',
-        'HOST': 'ec2-54-235-102-25.compute-1.amazonaws.com',                      
+        'NAME': 'd2j89mjv7otv89',                   
+        'USER': 'joapebabdsroai',
+        'PASSWORD': 'd7a2312ee513320d958a32d4cfab8f66f1a74b40d8132f6daf4b75641959e080',
+        'HOST': 'ec2-107-22-171-11.compute-1.amazonaws.com',                      
         'PORT': '5432',                    
     }
 }
