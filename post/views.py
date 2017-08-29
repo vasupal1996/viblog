@@ -73,12 +73,10 @@ def draft_or_publish_post(request):
             form = CreatePost(request.POST, request.FILES)
             if form.is_valid():
                 title = form.cleaned_data.get('title')
-
                 try:
                     new_post = Post.objects.get(title=title, author=user)
                 except:
                     new_post = Post()
-
                 new_post.title = form.cleaned_data.get("title")
                 new_post.content = form.cleaned_data.get('content')
                 new_post.author = request.user
@@ -89,7 +87,7 @@ def draft_or_publish_post(request):
                     new_post.status = Post.DRAFT
                 new_post.save()
                 tags = form.cleaned_data.get('tags')
-                if tags is not None:
+                if tags:
                     new_post.create_tags(tags)
                 return redirect('core:list_posts', username=user.username)
         else:

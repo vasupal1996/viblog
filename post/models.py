@@ -60,15 +60,28 @@ class Post(models.Model):
         return reverse('post:detail', kwargs={'slug': self.slug})
 
     def get_tags(self):
-        tags = Tag.objects.filter(post=self)
+        tags = Tag.objects.filter(post=self, status='A')
         return tags
 
     def create_tags(self, tags):
-        tags = tags.strip()
-        tag_list = tags.split(',')
-        for tag in tag_list:
-            if tag:
-                t, created = Tag.objects.get_or_create(tag=tag.lower(), post=self)
+        new_tags = tags.strip('').split(', ')
+        try:
+            tag_list = Tag.objects.filter(post=self)
+        except:
+            tag_list = None
+        if tag_list:
+            for old_tag in tag_list: 
+                if old_tag not in new_tags:
+                    try:
+                        old_tag.status = 'R'
+                        old_tag.save()
+                    except:
+                        old_tag.delete()
+                        old_tag.save()
+                else:
+                    pass
+        for tag in new_tags:
+            Tag.objects.get_or_create(tag=tag.lower(), post=self, status='A')
 
     def get_comment(self):
         comments = Comment.objects.filter(post=self) 
@@ -143,12 +156,18 @@ def create_slug(instance, new_slug=None):
     return slug
 
 class Tag(models.Model):
+    ADD = 'A'
+    REMOVE = 'R'
+    STATUS = (
+        (ADD, 'Add'),
+        (REMOVE, 'Remove'),
+        )
     tag = models.CharField(max_length=100, null=True, blank=True)
-    post = models.ForeignKey(Post, null=True)    
+    post = models.ForeignKey(Post, null=True)
+    status = models.CharField(max_length=1, choices=STATUS, default=REMOVE)
 
     def __str__(self):
         return self.tag
-
     class Meta:
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
