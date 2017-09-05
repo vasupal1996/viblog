@@ -77,7 +77,7 @@ def draft_or_publish_post(request):
                     new_post = Post.objects.get(title=title, author=user)
                 except:
                     new_post = Post()
-                new_post.title = form.cleaned_data.get("title")
+                new_post.title = form.cleaned_data.get("title").strip()
                 new_post.content = form.cleaned_data.get('content')
                 new_post.author = request.user
                 status = form.cleaned_data.get('status')
