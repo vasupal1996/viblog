@@ -91,23 +91,23 @@ WSGI_APPLICATION = 'viblog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'davd1ugvmlkl6t',                   
-        'USER': 'vgpgafwfbxrxcp',
-        'PASSWORD': 'b6b64512a420ca4ae03f03ec77124fb3abae8e2f784eab4ef3a0d8fd97ddf2d2',
-        'HOST': 'ec2-184-72-230-93.compute-1.amazonaws.com',                      
-        'PORT': '5432',                    
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'davd1ugvmlkl6t',                   
+#         'USER': 'vgpgafwfbxrxcp',
+#         'PASSWORD': 'b6b64512a420ca4ae03f03ec77124fb3abae8e2f784eab4ef3a0d8fd97ddf2d2',
+#         'HOST': 'ec2-184-72-230-93.compute-1.amazonaws.com',                      
+#         'PORT': '5432',                    
+#     }
+# }
 
 
 
