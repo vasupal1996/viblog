@@ -1,3 +1,7 @@
 * linguist-documentation
 #staticfiles/* linguist-documentation
-*.py linguist-documentation=False
+*.js linguist-documentation=False
+
+#* linguist-documentation
+staticfiles/* linguist-documentation
+*.js linguist-documentation=False
