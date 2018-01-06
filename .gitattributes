@@ -1,7 +1,3 @@
-* linguist-documentation
+* linguist-vendored
 #staticfiles/* linguist-documentation
-*.js linguist-documentation=False
-
-#* linguist-documentation
-staticfiles/* linguist-documentation
-*.js linguist-documentation=False
+*.js linguist-vendored=False
